@@ -37,6 +37,7 @@ export type StaticCanvasRenderConfig = {
   elementsPendingErasure: ElementsPendingErasure;
   pendingFlowchartNodes: PendingExcalidrawElements | null;
   theme: AppState["theme"];
+  applyDarkModeFilter?: boolean;
 };
 
 export type SVGRenderConfig = {

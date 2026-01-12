@@ -420,7 +420,7 @@ const drawElementOnCanvas = (
       for (const shape of shapes) {
         if (typeof shape === "string") {
           context.fillStyle =
-            renderConfig.theme === THEME.DARK
+            renderConfig.theme === THEME.DARK && renderConfig.applyDarkModeFilter
               ? applyDarkModeFilter(element.strokeColor)
               : element.strokeColor;
           context.fill(new Path2D(shape));
@@ -487,7 +487,7 @@ const drawElementOnCanvas = (
         context.save();
         context.font = getFontString(element);
         context.fillStyle =
-          renderConfig.theme === THEME.DARK
+          renderConfig.theme === THEME.DARK && renderConfig.applyDarkModeFilter
             ? applyDarkModeFilter(element.strokeColor)
             : element.strokeColor;
         context.textAlign = element.textAlign as CanvasTextAlign;
@@ -743,7 +743,7 @@ export const renderElement = (
 
         context.lineWidth = FRAME_STYLE.strokeWidth / appState.zoom.value;
         context.strokeStyle =
-          appState.theme === THEME.DARK
+          appState.theme === THEME.DARK && renderConfig.applyDarkModeFilter
             ? applyDarkModeFilter(FRAME_STYLE.strokeColor)
             : FRAME_STYLE.strokeColor;
 
@@ -752,7 +752,9 @@ export const renderElement = (
           context.strokeStyle =
             appState.theme === THEME.LIGHT
               ? "#7affd7"
-              : applyDarkModeFilter("#1d8264");
+              : renderConfig.applyDarkModeFilter
+              ? applyDarkModeFilter("#1d8264")
+              : "#1d8264";
         }
 
         if (FRAME_STYLE.radius && context.roundRect) {

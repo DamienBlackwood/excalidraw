@@ -115,6 +115,7 @@ export type ActionName =
   | "viewMode"
   | "exportWithDarkMode"
   | "toggleTheme"
+  | "toggleDarkModeFilter"
   | "increaseFontSize"
   | "decreaseFontSize"
   | "unbindText"

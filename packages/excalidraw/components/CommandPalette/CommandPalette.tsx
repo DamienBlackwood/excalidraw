@@ -513,6 +513,7 @@ function CommandPaletteInner({
             }));
           },
         },
+        defaultItems.toggleDarkModeFilter,
         ...SHAPES.reduce((acc: CommandPaletteItem[], shape) => {
           const { value, icon, key, numericKey } = shape;
 

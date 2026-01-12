@@ -82,7 +82,11 @@ export class ShapeCache {
   private static rg = new RoughGenerator();
   private static cache = new WeakMap<
     ExcalidrawElement,
-    { shape: ElementShape; theme: AppState["theme"] }
+    {
+      shape: ElementShape;
+      theme: AppState["theme"];
+      applyDarkModeFilter: boolean;
+    }
   >();
 
   /**
@@ -92,9 +96,14 @@ export class ShapeCache {
   public static get = <T extends ExcalidrawElement>(
     element: T,
     theme: AppState["theme"] | null,
+    applyDarkModeFilter: boolean = true,
   ) => {
     const cached = ShapeCache.cache.get(element);
-    if (cached && (theme === null || cached.theme === theme)) {
+    if (
+      cached &&
+      (theme === null || cached.theme === theme) &&
+      cached.applyDarkModeFilter === applyDarkModeFilter
+    ) {
       return cached.shape as T["type"] extends keyof ElementShapes
         ? ElementShapes[T["type"]] | undefined
         : ElementShape | undefined;
@@ -124,12 +133,17 @@ export class ShapeCache {
       canvasBackgroundColor: AppState["viewBackgroundColor"];
       embedsValidationStatus: EmbedsValidationStatus;
       theme: AppState["theme"];
+      applyDarkModeFilter?: boolean;
     } | null,
   ) => {
     // when exporting, always regenerated to guarantee the latest shape
     const cachedShape = renderConfig?.isExporting
       ? undefined
-      : ShapeCache.get(element, renderConfig ? renderConfig.theme : null);
+      : ShapeCache.get(
+          element,
+          renderConfig ? renderConfig.theme : null,
+          renderConfig?.applyDarkModeFilter ?? true,
+        );
 
     // `null` indicates no rc shape applicable for this element type,
     // but it's considered a valid cache value (= do not regenerate)
@@ -147,6 +161,7 @@ export class ShapeCache {
         canvasBackgroundColor: COLOR_PALETTE.white,
         embedsValidationStatus: null,
         theme: THEME.LIGHT,
+        applyDarkModeFilter: true,
       },
     ) as T["type"] extends keyof ElementShapes
       ? ElementShapes[T["type"]]
@@ -156,6 +171,7 @@ export class ShapeCache {
       ShapeCache.cache.set(element, {
         shape,
         theme: renderConfig?.theme || THEME.LIGHT,
+        applyDarkModeFilter: renderConfig?.applyDarkModeFilter ?? true,
       });
     }
 
@@ -330,9 +346,7 @@ const getArrowheadShapes = (
     return [generator.line(x3, y3, x4, y4, options)];
   };
 
-  const strokeColor = isDarkMode
-    ? applyDarkModeFilter(element.strokeColor)
-    : element.strokeColor;
+  const strokeColor = element.strokeColor;
 
   switch (arrowhead) {
     case "dot":
@@ -635,14 +649,16 @@ const _generateElementShape = (
     canvasBackgroundColor,
     embedsValidationStatus,
     theme,
+    applyDarkModeFilter: shouldApplyDarkModeFilter = true,
   }: {
     isExporting: boolean;
     canvasBackgroundColor: string;
     embedsValidationStatus: EmbedsValidationStatus | null;
     theme?: AppState["theme"];
+    applyDarkModeFilter?: boolean;
   },
 ): ElementShape => {
-  const isDarkMode = theme === THEME.DARK;
+  const isDarkMode = theme === THEME.DARK && shouldApplyDarkModeFilter;
   switch (element.type) {
     case "rectangle":
     case "iframe":

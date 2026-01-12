@@ -2120,6 +2120,7 @@ class App extends React.Component<AppProps, AppState> {
                             pendingFlowchartNodes:
                               this.flowChartCreator.pendingNodes,
                             theme: this.state.theme,
+                            applyDarkModeFilter: this.state.applyDarkModeFilter,
                           }}
                         />
                         {this.state.newElement && (
@@ -2141,6 +2142,7 @@ class App extends React.Component<AppProps, AppState> {
                                 this.elementsPendingErasure,
                               pendingFlowchartNodes: null,
                               theme: this.state.theme,
+                              applyDarkModeFilter: this.state.applyDarkModeFilter,
                             }}
                           />
                         )}
@@ -3235,6 +3237,11 @@ class App extends React.Component<AppProps, AppState> {
     this.excalidrawContainerRef.current?.classList.toggle(
       "theme--dark",
       this.state.theme === THEME.DARK,
+    );
+
+    this.excalidrawContainerRef.current?.classList.toggle(
+      "disable-dark-mode-filter",
+      this.state.theme === THEME.DARK && !this.state.applyDarkModeFilter,
     );
 
     if (

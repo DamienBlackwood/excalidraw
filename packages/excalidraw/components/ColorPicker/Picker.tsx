@@ -202,6 +202,7 @@ export const Picker = React.forwardRef(
               showHotKey={showHotKey}
             />
           </div>
+
           {children}
         </div>
       </div>

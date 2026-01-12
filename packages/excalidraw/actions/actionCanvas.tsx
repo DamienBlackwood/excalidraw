@@ -494,6 +494,31 @@ export const actionToggleTheme = register<AppState["theme"]>({
   },
 });
 
+export const actionToggleDarkModeFilter = register<boolean>({
+  name: "toggleDarkModeFilter",
+  label: (_, appState) => {
+    return appState.applyDarkModeFilter
+      ? "labels.disableDarkModeFilter"
+      : "labels.enableDarkModeFilter";
+  },
+  keywords: ["toggle", "dark", "mode", "filter", "color"],
+  viewMode: true,
+  trackEvent: { category: "canvas" },
+  perform: (_, appState, value) => {
+    return {
+      appState: {
+        ...appState,
+        applyDarkModeFilter:
+          value !== undefined ? value : !appState.applyDarkModeFilter,
+      },
+      captureUpdate: CaptureUpdateAction.EVENTUALLY,
+    };
+  },
+  predicate: (elements, appState, props, app) => {
+    return !!app.props.UIOptions.canvasActions.toggleTheme;
+  },
+});
+
 export const actionToggleEraserTool = register({
   name: "toggleEraserTool",
   label: "toolBar.eraser",

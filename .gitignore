@@ -1,5 +1,6 @@
 .DS_Store
 .env.development.local
+.claude.md
 .env.local
 .env.production.local
 .env.test.local

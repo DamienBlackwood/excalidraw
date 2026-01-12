@@ -11,6 +11,7 @@ exports[`exportToSvg > with default arguments 1`] = `
     "locked": false,
     "type": "selection",
   },
+  "applyDarkModeFilter": true,
   "bindMode": "orbit",
   "collaborators": Map {},
   "contextMenu": null,

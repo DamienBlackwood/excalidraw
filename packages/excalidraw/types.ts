@@ -394,6 +394,7 @@ export interface AppState {
   toast: { message: string; closable?: boolean; duration?: number } | null;
   zenModeEnabled: boolean;
   theme: Theme;
+  applyDarkModeFilter: boolean;
   /** grid cell px size */
   gridSize: number;
   gridStep: number;
